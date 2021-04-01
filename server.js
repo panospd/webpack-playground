@@ -1,8 +1,23 @@
 const express = require('express');
 const app = express();
 
-app.get('/', function (req, res) {
-  res.send('Some dummy content');
+const path = require('path');
+const fs = require('fs');
+
+app.use('/static', express.static(path.resolve(__dirname, './dist')));
+
+app.get('/hello-world/', function (req, res) {
+  const pathToFile = path.resolve(__dirname, './dist/hello-world.html');
+  const contentFromHtmlFile = fs.readFileSync(pathToFile, 'utf-8');
+
+  res.send(contentFromHtmlFile);
+});
+
+app.get('/kiwi/', function (req, res) {
+  const pathToFile = path.resolve(__dirname, './dist/kiwi.html');
+  const contentFromHtmlFile = fs.readFileSync(pathToFile, 'utf-8');
+
+  res.send(contentFromHtmlFile);
 });
 
 app.listen(3000, function () {
