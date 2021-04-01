@@ -1,18 +1,18 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
-  entry: "./src/index.js",
+  entry: './src/index.js',
   output: {
-    filename: "bundle.js",
-    path: path.resolve(__dirname, "./dist"),
-    publicPath: "dist/",
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, './dist'),
+    publicPath: 'dist/',
   },
-  mode: "none",
+  mode: 'none',
   module: {
     rules: [
       {
-        test: /\.(png|jpg)$/,
-        type: "asset",
+        test: /\.(png|jpg)$/,k
+        type: 'asset',
         parser: {
           dataUrlCondition: {
             maxSize: 3 * 1024,
@@ -21,7 +21,28 @@ module.exports = {
       },
       {
         test: /\.txt/,
-        type: "asset/source",
+        type: 'asset/source',
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.s[ac]ss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader'],
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/env'],
+              plugins: ['@babel/plugin-proposal-class-properties'],
+            },
+          },
+        ],
       },
     ],
   },
