@@ -6,3 +6,9 @@ const heading = new Heading();
 
 heading.render();
 helloWorldButton.render();
+
+if (process.env.NODE_ENV == 'production') {
+  console.log('Production mode');
+} else {
+  console.log('Development mode');
+}
