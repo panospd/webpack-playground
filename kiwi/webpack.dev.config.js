@@ -3,10 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: {
-    'hello-world': './src/hello-world.js',
-    kiwi: './src/kiwi.js',
-  },
+  entry: './src/kiwi.js',
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, './dist'),
@@ -15,8 +12,8 @@ module.exports = {
   mode: 'development',
   devServer: {
     contentBase: path.resolve(__dirname, './dist'),
-    index: 'index.html',
-    port: 9000,
+    index: 'kiwi.html',
+    port: 9002,
   },
   module: {
     rules: [
@@ -30,14 +27,6 @@ module.exports = {
         },
       },
       {
-        test: /\.txt/,
-        type: 'asset/source',
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
         test: /\.s[ac]ss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
@@ -49,7 +38,6 @@ module.exports = {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/env'],
-              plugins: ['@babel/plugin-proposal-class-properties'],
             },
           },
         ],
@@ -63,18 +51,10 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      filename: 'hello-world.html',
-      title: 'Hello World title',
-      description: 'Hello world Description',
-      template: 'src/page-template.hbs',
-      chunks: ['hello-world'],
-    }),
-    new HtmlWebpackPlugin({
       filename: 'kiwi.html',
       title: 'Kiwi title',
       description: 'Kiwi Description',
       template: 'src/page-template.hbs',
-      chunks: ['kiwi'],
     }),
   ],
 };

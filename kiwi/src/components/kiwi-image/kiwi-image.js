@@ -5,7 +5,7 @@ class KiwiImage {
   render() {
     const img = document.createElement('img');
     img.src = Kiwi;
-    img.alt = 'Kiwi';
+    img.alt = 'kiwi';
 
     img.classList.add('kiwi-image');
 
