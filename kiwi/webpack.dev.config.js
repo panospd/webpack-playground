@@ -1,27 +1,27 @@
-const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { ModuleFederationPlugin } = require('webpack').container;
-const { SourceMapDevToolPlugin } = require('webpack');
+const path = require("path");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
+const { SourceMapDevToolPlugin } = require("webpack");
 
 module.exports = {
-  entry: './src/kiwi.js',
+  entry: "./src/kiwi.js",
   output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, './dist'),
-    publicPath: '',
+    filename: "[name].bundle.js",
+    path: path.resolve(__dirname, "./dist"),
+    publicPath: "http://localhost:9002",
   },
-  mode: 'development',
+  mode: "development",
   devServer: {
-    contentBase: path.resolve(__dirname, './dist'),
-    index: 'kiwi.html',
+    contentBase: path.resolve(__dirname, "./dist"),
+    index: "kiwi.html",
     port: 9002,
   },
   module: {
     rules: [
       {
         test: /\.(png|jpg)$/,
-        type: 'asset',
+        type: "asset",
         parser: {
           dataUrlCondition: {
             maxSize: 3 * 1024,
@@ -30,38 +30,39 @@ module.exports = {
       },
       {
         test: /\.s[ac]ss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
         test: /\.js$/,
         exclude: /node_modules/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: "babel-loader",
             options: {
-              presets: ['@babel/env'],
+              presets: ["@babel/env"],
             },
           },
         ],
       },
       {
         test: /\.hbs$/,
-        use: ['handlebars-loader'],
+        use: ["handlebars-loader"],
       },
     ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      filename: 'kiwi.html',
-      title: 'Kiwi title',
-      description: 'Kiwi Description',
-      template: 'src/page-template.hbs',
+      filename: "kiwi.html",
+      title: "Kiwi title",
+      description: "Kiwi Description",
+      template: "src/page-template.hbs",
     }),
     new ModuleFederationPlugin({
-      name: 'KiwiApp',
-      remotes: {
-        HelloWorldApp: 'HelloWorldApp@http://localhost:9001/remoteEntry.js',
+      name: "KiwiApp",
+      filename: "remoteEntry.js",
+      exposes: {
+        "./KiwiPage": "./src/components/kiwi-page/kiwi-page.js",
       },
     }),
     new SourceMapDevToolPlugin(),
