@@ -5,31 +5,25 @@ const { ModuleFederationPlugin } = require("webpack").container;
 const { SourceMapDevToolPlugin } = require("webpack");
 
 module.exports = {
-  entry: "./src/kiwi.js",
+  entry: "./src/dashboard.js",
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "./dist"),
-    publicPath: "http://localhost:9002/",
+    publicPath: "http://localhost:9002",
   },
   mode: "development",
   devServer: {
     contentBase: path.resolve(__dirname, "./dist"),
-    index: "kiwi.html",
-    port: 9002,
+    index: "dashboard.html",
+    port: 9000,
+    historyApiFallback: {
+      index: "dashboard.html",
+    },
   },
   module: {
     rules: [
       {
-        test: /\.(png|jpg)$/,
-        type: "asset",
-        parser: {
-          dataUrlCondition: {
-            maxSize: 3 * 1024,
-          },
-        },
-      },
-      {
-        test: /\.s[ac]ss$/,
+        test: /\.scss$/,
         use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
@@ -44,27 +38,20 @@ module.exports = {
           },
         ],
       },
-      {
-        test: /\.hbs$/,
-        use: ["handlebars-loader"],
-      },
     ],
   },
   plugins: [
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      filename: "kiwi.html",
-      title: "Kiwi title",
-      description: "Kiwi Description",
-      template: "src/page-template.hbs",
+      filename: "dashboard.html",
+      title: "Dashboard",
     }),
     new ModuleFederationPlugin({
-      name: "KiwiApp",
-      filename: "remoteEntry.js",
-      exposes: {
-        "./KiwiPage": "./src/components/kiwi-page/kiwi-page.js",
+      name: "App",
+      remotes: {
+        HelloWorldApp: "HelloWorldApp@http://localhost:9001/remoteEntry.js",
+        KiwiApp: "KiwiApp@http://localhost:9002/remoteEntry.js",
       },
     }),
-    new SourceMapDevToolPlugin(),
   ],
 };
